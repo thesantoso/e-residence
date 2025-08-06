@@ -71,10 +71,10 @@ export function TransactionTable({ className }: TransactionTableProps) {
     const [statusFilter, setStatusFilter] = useState("all");
     const [methodFilter, setMethodFilter] = useState("all");
     const [isLoading, setIsLoading] = useState(false);
-    const [transactions, setTransactions] = useState<SimpleTransaction[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedTransaction, setSelectedTransaction] = useState<SimpleTransaction | null>(null);    // Mock data for now
-    const mockTransactions: SimpleTransaction[] = [
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);    // Mock data for now
+    const mockTransactions: Transaction[] = [
         {
             id: "1",
             nomorUrut: 1001,
@@ -129,12 +129,12 @@ export function TransactionTable({ className }: TransactionTableProps) {
         return matchesSearch && matchesStatus && matchesMethod;
     });
 
-    const handleEdit = (transaction: SimpleTransaction) => {
+    const handleEdit = (transaction: Transaction) => {
         setSelectedTransaction(transaction);
         setIsModalOpen(true);
     };
 
-    const handleDelete = (transaction: SimpleTransaction) => {
+    const handleDelete = (transaction: Transaction) => {
         if (confirm(`Yakin ingin menghapus transaksi ${transaction.nomorUrut}?`)) {
             console.log("Delete transaction:", transaction.id);
         }
@@ -334,7 +334,7 @@ export function TransactionTable({ className }: TransactionTableProps) {
             </Card>
 
             {/* Transaction Modal */}
-            <SimpleTransactionModal
+            <TransactionModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 transaction={selectedTransaction}

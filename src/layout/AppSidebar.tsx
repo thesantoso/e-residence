@@ -34,13 +34,30 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    path: "/",
-    // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    path: "/dashboard",
+    // subItems: [{ name: "Ecommerce", path: "/dashboard", pro: false }],
   },
   {
     icon: <GroupIcon />,
     name: "Data Warga",
     path: "/data-warga",
+  },
+  {
+    icon: <Cog6Tooth />,
+    name: "Master Data",
+    subItems: [
+      { name: "Kategori Iuran", path: "/master-data/categories" },
+      { name: "Pengaturan Sistem", path: "/master-data/settings" },
+    ],
+  },
+  {
+    icon: <PieChartIcon />,
+    name: "Manajemen Iuran",
+    subItems: [
+      { name: "Transaksi Iuran", path: "/iuran/transactions" },
+      { name: "Laporan Pembayaran", path: "/iuran/reports" },
+      { name: "Warga Belum Bayar", path: "/iuran/unpaid" },
+    ],
   },
   {
     icon: <CalenderIcon />,
@@ -329,7 +346,7 @@ const AppSidebar: React.FC = () => {
         className={`py-8 flex  ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
           }`}
       >
-        <Link href="/">
+        <Link href="/dashboard">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
