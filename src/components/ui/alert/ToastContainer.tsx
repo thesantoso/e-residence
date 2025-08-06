@@ -4,7 +4,7 @@ import { useToast } from "@/context/ToastContext";
 import Alert from "./Alert";
 
 const ToastContainer: React.FC = () => {
-    const { toasts, removeToast } = useToast();
+    const { toasts } = useToast();
 
     return (
         <div className="fixed z-[9999] bottom-6 right-6 flex flex-col items-end gap-4 pointer-events-none">

@@ -52,6 +52,7 @@ import ChatIcon from "./chat.svg";
 import MoreDotIcon from "./more-dot.svg";
 import BellIcon from "./bell.svg";
 import ShieldCheckIcon from "./shield-check.svg";
+import Cog6Tooth from "./cog-6tooth.svg";
 
 export {
   DownloadIcon,
@@ -108,4 +109,5 @@ export {
   ChevronUpIcon,
   ChatIcon,
   ShieldCheckIcon,
+  Cog6Tooth,
 };

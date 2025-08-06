@@ -42,7 +42,7 @@ const AdminProtectedPage: React.FC<AdminProtectedPageProps> = ({ children }) => 
                         Access Denied
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400">
-                        You don't have permission to access this page. Admin access required.
+                        You don&apos;t have permission to access this page. Admin access required.
                     </p>
                 </div>
             </div>

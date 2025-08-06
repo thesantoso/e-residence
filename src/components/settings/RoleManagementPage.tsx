@@ -6,7 +6,9 @@ import { PlusIcon, PencilIcon, TrashBinIcon, ShieldCheckIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
 
 const RoleManagementPage: React.FC = () => {
-    const { roles, loading, error, deleteRole } = useUserManagement();
+    const { roles, loading, deleteRole } = useUserManagement();
+    // TODO: Implement add role form
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [showAddForm, setShowAddForm] = useState(false);
 
     const handleDelete = async (id: string, name: string) => {
@@ -14,7 +16,7 @@ const RoleManagementPage: React.FC = () => {
             try {
                 await deleteRole(id);
                 alert('Role berhasil dihapus');
-            } catch (error) {
+            } catch {
                 alert('Gagal menghapus role');
             }
         }
@@ -66,24 +68,27 @@ const RoleManagementPage: React.FC = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
-                        Role Management
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Kelola role dan permissions sistem
-                    </p>
+            <div className="bg-white rounded-2xl border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
+                            Role Management
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            Kelola role dan permissions sistem
+                        </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                        <Button
+                            onClick={() => setShowAddForm(true)}
+                            className="flex items-center gap-2"
+                        >
+                            <PlusIcon className="w-4 h-4" />
+                            Tambah Role
+                        </Button>
+                    </div>
                 </div>
-                <Button
-                    onClick={() => setShowAddForm(true)}
-                    className="flex items-center gap-2"
-                >
-                    <PlusIcon className="w-4 h-4" />
-                    Tambah Role
-                </Button>
             </div>
-
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white rounded-lg border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-4">
@@ -105,13 +110,6 @@ const RoleManagementPage: React.FC = () => {
                     </p>
                 </div>
             </div>
-
-            {/* Error Display */}
-            {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
-                    <p className="text-red-600 dark:text-red-400">Error: {error}</p>
-                </div>
-            )}
 
             {/* Roles Table */}
             <div className="bg-white rounded-2xl border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 overflow-hidden">
@@ -192,8 +190,8 @@ const RoleManagementPage: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${role.isActive
-                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                                                    : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
                                                 }`}>
                                                 {role.isActive ? 'Active' : 'Inactive'}
                                             </span>

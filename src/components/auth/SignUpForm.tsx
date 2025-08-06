@@ -1,13 +1,11 @@
 "use client";
 import Checkbox from "@/components/form/input/Checkbox";
-import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +19,6 @@ export default function SignUpForm() {
   const [success, setSuccess] = useState("");
 
   const { signUp, signInWithGoogle } = useAuth();
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +40,7 @@ export default function SignUpForm() {
       } else {
         setSuccess("Please check your email to confirm your account before signing in.");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -60,7 +57,7 @@ export default function SignUpForm() {
       if (error) {
         setError(error.message);
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

@@ -63,22 +63,26 @@ const UserManagementPage: React.FC = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
-                        User Management
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Kelola pengguna sistem dan role mereka
-                    </p>
+            <div className="bg-white rounded-2xl border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
+                            User Management
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            Kelola pengguna sistem dan role mereka
+                        </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                        <Button
+                            onClick={() => setShowAddForm(true)}
+                            className="flex items-center gap-2"
+                        >
+                            <PlusIcon className="w-4 h-4" />
+                            Tambah User
+                        </Button>
+                    </div>
                 </div>
-                <Button
-                    onClick={() => setShowAddForm(true)}
-                    className="flex items-center gap-2"
-                >
-                    <PlusIcon className="w-4 h-4" />
-                    Tambah User
-                </Button>
             </div>
 
             {/* Statistics Cards */}
@@ -90,15 +94,15 @@ const UserManagementPage: React.FC = () => {
                     </p>
                 </div>
                 <div className="bg-white rounded-lg border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-4">
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Admin</h3>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Roles</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white/90 mt-1">
-                        {users.filter(u => u.roleName === 'Admin').length}
+                        {roles.length}
                     </p>
                 </div>
                 <div className="bg-white rounded-lg border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-4">
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Warga</h3>
+                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Admin</h3>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white/90 mt-1">
-                        {users.filter(u => u.roleName === 'Warga').length}
+                        {users.filter(u => u.roleName === 'Admin').length}
                     </p>
                 </div>
                 <div className="bg-white rounded-lg border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-4">
@@ -254,13 +258,16 @@ const UserManagementPage: React.FC = () => {
                             <div className="flex items-center justify-end gap-3">
                                 <Button
                                     onClick={() => setShowDeleteConfirm({ show: false })}
-                                    className="px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600 rounded-lg"
+                                    variant="outline"
+                                    size="sm"
                                 >
                                     Batal
                                 </Button>
                                 <Button
                                     onClick={confirmDelete}
-                                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                                    variant="primary"
+                                    size="sm"
+                                    className="bg-red-600 hover:bg-red-700 text-white"
                                 >
                                     Hapus
                                 </Button>

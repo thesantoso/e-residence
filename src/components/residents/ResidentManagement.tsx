@@ -7,8 +7,11 @@ import { PlusIcon, PencilIcon, TrashBinIcon, UserIcon } from "@/icons";
 import Button from "@/components/ui/button/Button";
 
 const ResidentManagement: React.FC = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { residents, loading, error, deleteResident } = useResident();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [showAddForm, setShowAddForm] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [editingResident, setEditingResident] = useState<string | null>(null);
 
     const handleDelete = async (id: string, name: string) => {
@@ -58,22 +61,27 @@ const ResidentManagement: React.FC = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
-                        Data Warga Perumahan
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Kelola data penduduk dan lihat statistik perumahan
-                    </p>
+            <div className="bg-white rounded-2xl border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">
+                            Data Warga Perumahan
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            Kelola data penduduk dan lihat statistik perumahan
+                        </p>
+
+                    </div>
+                    <div className="flex-shrink-0">
+                        <Button
+                            onClick={() => setShowAddForm(true)}
+                            className="flex items-center gap-2"
+                        >
+                            <PlusIcon className="w-4 h-4" />
+                            Tambah Warga
+                        </Button>
+                    </div>
                 </div>
-                <Button
-                    onClick={() => setShowAddForm(true)}
-                    className="flex items-center gap-2"
-                >
-                    <PlusIcon className="w-4 h-4" />
-                    Tambah Warga
-                </Button>
             </div>
 
             {/* Statistics Cards */}
@@ -146,8 +154,8 @@ const ResidentManagement: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${resident.gender === 'MALE'
-                                                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
-                                                    : 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400'
+                                                ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
+                                                : 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400'
                                                 }`}>
                                                 {resident.gender === 'MALE' ? 'Laki-laki' : 'Perempuan'}
                                             </span>

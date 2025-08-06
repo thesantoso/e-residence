@@ -1,7 +1,6 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { createClient } from '@/utils/supabase/client'
 
 // Interface untuk role
 export interface Role {

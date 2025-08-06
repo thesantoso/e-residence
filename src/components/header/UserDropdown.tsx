@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
@@ -44,7 +42,7 @@ export default function UserDropdown() {
   const getShortName = () => {
     const fullName = getUserDisplayName();
     if (fullName.includes(' ')) {
-      const [first, last] = fullName.split(' ');
+      const [first] = fullName.split(' ');
       return first;
     }
     return fullName;
