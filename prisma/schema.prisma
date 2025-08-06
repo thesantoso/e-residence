@@ -1,0 +1,202 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================================
+// AUTHENTICATION & USER MANAGEMENT (extends Supabase Auth)
+// ============================================================================
+
+model Profile {
+  id       String   @id @default(uuid())
+  userId   String   @unique @map("user_id") // Reference to auth.users.id (handled by application)
+  fullName String?  @map("full_name")
+  email    String?  @unique
+  phone    String?
+  avatar   String?
+  role     UserRole @default(RESIDENT)
+  
+  // Relations
+  residents             Resident[]
+  transactions          Transaction[]
+  announcements         Announcement[]
+  transactionHistory    TransactionHistory[] @relation("TransactionHistoryAdmin")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("profiles")
+}
+
+// ============================================================================
+// RESIDENT MANAGEMENT
+// ============================================================================
+
+model Resident {
+  id            String   @id @default(uuid())
+  namaWarga     String   @map("nama_warga")
+  nik           String?  @unique
+  nomorRumah    String   @map("nomor_rumah")
+  blok          String?
+  alamatLengkap String?  @map("alamat_lengkap")
+  noTelp        String?  @map("no_telp")
+  email         String?
+  status        ResidentStatus @default(ACTIVE)
+  profileId     String?  @map("profile_id")
+  
+  // Relations
+  profile      Profile?      @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  transactions Transaction[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("residents")
+}
+
+// ============================================================================
+// TRANSACTION & PAYMENT MANAGEMENT
+// ============================================================================
+
+model Transaction {
+  id               String            @id @default(uuid())
+  nomorUrut        Int?              @map("nomor_urut")
+  kategoriId       String            @map("kategori_id")
+  residentId       String            @map("resident_id")
+  periode          String            // Format: MM/YYYY (e.g., "08/2025")
+  jumlahNominal    Int               @map("jumlah_nominal")
+  metodePembayaran PaymentMethod     @map("metode_pembayaran")
+  statusPembayaran PaymentStatus     @map("status_pembayaran") @default(PAID) // Only paid transactions are recorded
+  tanggalBayar     DateTime          @map("tanggal_bayar")
+  tanggalJatuhTempo DateTime?        @map("tanggal_jatuh_tempo")
+  keterangan       String?
+  buktiPembayaran  String?           @map("bukti_pembayaran") // File URL/path
+  profileId        String            @map("profile_id") // Admin who input this data
+  
+  // Relations
+  kategori TransactionCategory @relation(fields: [kategoriId], references: [id], onDelete: Cascade)
+  resident Resident            @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  profile  Profile             @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  history  TransactionHistory[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@unique([residentId, kategoriId, periode]) // Prevent duplicate payments
+  @@map("transactions")
+}
+
+model TransactionCategory {
+  id              String  @id @default(uuid())
+  namaKategori    String  @map("nama_kategori")
+  deskripsi       String?
+  nominalDefault  Int     @map("nominal_default") // Default amount for this category
+  isActive        Boolean @default(true) @map("is_active")
+  
+  // Relations
+  transactions Transaction[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("transaction_categories")
+}
+
+// Transaction edit history for audit trail
+model TransactionHistory {
+  id            String   @id @default(uuid())
+  transactionId String   @map("transaction_id")
+  action        String   // "CREATE", "UPDATE", "DELETE"
+  oldData       Json?    @map("old_data")
+  newData       Json?    @map("new_data")
+  adminId       String   @map("admin_id")
+  reason        String?  // Reason for change
+  
+  // Relations
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  admin       Profile     @relation(fields: [adminId], references: [id], onDelete: Cascade, name: "TransactionHistoryAdmin")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("transaction_history")
+}
+
+// System settings for iuran management
+model IuranSettings {
+  id                    String @id @default(uuid())
+  reminderDaysBefore    Int    @default(7) @map("reminder_days_before") // Days before due date to send reminder
+  defaultDueDateDay     Int    @default(10) @map("default_due_date_day") // Default due date (day of month)
+  lateFeePercentage     Float? @map("late_fee_percentage") // Future: late fee percentage
+  isReminderActive      Boolean @default(true) @map("is_reminder_active")
+  
+  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedBy String   @map("updated_by")
+  
+  @@map("iuran_settings")
+}
+
+// ============================================================================
+// ANNOUNCEMENTS & COMMUNICATIONS
+// ============================================================================
+
+model Announcement {
+  id      String           @id @default(uuid())
+  title   String
+  content String
+  type    AnnouncementType @default(INFO)
+  isActive Boolean         @default(true) @map("is_active")
+  
+  // Relations
+  authorId String  @map("author_id")
+  author   Profile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("announcements")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  RESIDENT
+}
+
+enum ResidentStatus {
+  ACTIVE
+  INACTIVE
+  MOVED_OUT
+}
+
+enum PaymentMethod {
+  CASH
+  TRANSFER
+  QRIS
+  BANK
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+  PENDING
+  OVERDUE
+}
+
+enum AnnouncementType {
+  INFO
+  WARNING
+  URGENT
+  MAINTENANCE
+}
