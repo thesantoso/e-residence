@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Skip ESLint during Vercel builds
   },
+  output: "standalone",
   images: {
     remotePatterns: [
       {
